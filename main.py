@@ -1,4 +1,8 @@
 import numpy as np
+from sys import platform as sys_pf
+import matplotlib
+if sys_pf == 'darwin':
+    matplotlib.use("TkAgg")
 import matplotlib.colors
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation

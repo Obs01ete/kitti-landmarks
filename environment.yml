@@ -1,0 +1,47 @@
+name: kitti_landmarks
+channels:
+  - anaconda
+  - defaults
+dependencies:
+  - ca-certificates=2018.03.07=0
+  - certifi=2018.10.15=py36_0
+  - jpeg=9b=he5867d9_2
+  - libtiff=4.0.9=hcb84e12_2
+  - olefile=0.46=py36_0
+  - openssl=1.1.1=h1de35cc_0
+  - pillow=5.3.0=py36hb68e598_0
+  - blas=1.0=mkl
+  - cycler=0.10.0=py36hfc81398_0
+  - freetype=2.9.1=hb4e5f40_0
+  - intel-openmp=2019.0=118
+  - kiwisolver=1.0.1=py36h0a44026_0
+  - libcxx=4.0.1=hcfea43d_1
+  - libcxxabi=4.0.1=hcfea43d_1
+  - libedit=3.1.20170329=hb402a30_2
+  - libffi=3.2.1=h475c297_4
+  - libgfortran=3.0.1=h93005f0_2
+  - libpng=1.6.35=ha441bb4_0
+  - matplotlib=3.0.1=py36h54f8f79_0
+  - mkl=2019.0=118
+  - mkl_fft=1.0.6=py36hb8a8100_0
+  - mkl_random=1.0.1=py36h5d10147_1
+  - ncurses=6.1=h0a44026_0
+  - numpy=1.15.3=py36h6a91979_0
+  - numpy-base=1.15.3=py36h8a80b8c_0
+  - pip=10.0.1=py36_0
+  - pyparsing=2.2.2=py36_0
+  - python=3.6.7=haf84260_0
+  - python-dateutil=2.7.3=py36_0
+  - pytz=2018.5=py36_0
+  - readline=7.0=h1de35cc_5
+  - setuptools=40.4.3=py36_0
+  - six=1.11.0=py36_1
+  - sqlite=3.25.2=ha441bb4_0
+  - tabulate=0.8.2=py36_0
+  - tk=8.6.8=ha441bb4_0
+  - tornado=5.1.1=py36h1de35cc_0
+  - wheel=0.32.2=py36_0
+  - xz=5.2.4=h1de35cc_4
+  - zlib=1.2.11=hf3cbc9b_2
+prefix: /Users/dmitry/anaconda3/envs/kitti_landmarks
+
