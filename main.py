@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from sys import platform as sys_pf
 import matplotlib
@@ -172,7 +173,11 @@ def main():
                 plt.draw()
 
         anim = animation.FuncAnimation(fig, updatefig, frames=get_next_frame_contents)
-        anim.save("{}_{:02d}.mp4".format("prev" if preview else "vis", i_seq), fps=10)
+        name = "{}_{:02d}.mp4".format("prev" if preview else "vis", i_seq)
+        folder = "vis"
+        os.makedirs(folder, exist_ok=True)
+        path = os.path.join(folder, name)
+        anim.save(path, fps=10)
 
         del fig
 
