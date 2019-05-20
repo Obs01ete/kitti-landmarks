@@ -9,6 +9,8 @@ if sys_pf == 'darwin':
 import matplotlib.pyplot as plt
 from matplotlib import collections as mc
 
+from world import World
+
 
 # World coordinate system
 #
@@ -64,14 +66,25 @@ class Canvas:
         pass
 
 
+class Lidar:
+    def __init__(self, num_rays):
+        self._num_rays = num_rays
+
+    def get_rays(self, pose2d_xycs):
+        cos_a, sin_a = pose2d_xycs[2:4]
+        angle = math.atan2(sin_a, cos_a)
+        angles = np.arange(angle, angle+2*math.pi, 2*math.pi/self._num_rays, dtype=np.float32)
+        coss = np.expand_dims(np.cos(angles), 1)
+        sins = np.expand_dims(np.sin(angles), 1)
+        centers = np.tile(pose2d_xycs[0:2], (self._num_rays, 1))
+        rays = np.concatenate((centers, coss, sins), axis=1)
+        return rays
+
 
 class Simulator:
-    def __init__(self):
-        np.random.seed(17)
-        self.world_size = np.array((120, 100), dtype=np.float32)
-        num_segments = 10
-        segments = np.random.rand(num_segments, 2, 2).astype(np.float32)
-        self._segments = segments * self.world_size[np.newaxis, np.newaxis, :]
+    def __init__(self, world: World, lidar: Lidar):
+        self._world = world
+        self._lidar = lidar
         pass
 
     def render_pose(self, pose2d_xycs: np.ndarray) -> np.ndarray:
@@ -81,15 +94,9 @@ class Simulator:
         :return:
         """
 
-        num_rays = 360 // 10
-        cos_a, sin_a = pose2d_xycs[2:4]
-        angle = math.atan2(sin_a, cos_a)
-        angles = np.arange(angle, angle+2*math.pi, 2*math.pi/num_rays, dtype=np.float32)
-        coss = np.expand_dims(np.cos(angles), 1)
-        sins = np.expand_dims(np.sin(angles), 1)
-        centers = np.tile(pose2d_xycs[0:2], (num_rays, 1))
-        rays = np.concatenate((centers, coss, sins), axis=1)
-        hit_segments = self.closest_intersection(self._segments, rays)
+        segments = self._world.get_segments()
+        rays = self._lidar.get_rays(pose2d_xycs)
+        hit_segments = self.closest_intersection(segments, rays)
         self._visualize(hit_segments)
         hit_points = hit_segments[:, 1, :]
         return hit_points
@@ -133,7 +140,7 @@ class Simulator:
                 alphas >= 0, # segment is intersected
                 alphas <= 1), # segment is intersected
             betas >= 0) # positive ray
-        #ray_has_intersection = np.any(has_intersection, axis=0)
+
         masked_betas = ma.array(betas, mask=np.logical_not(has_intersection))
         min_betas = masked_betas.min(axis=0, fill_value=float('inf'))
 
@@ -149,8 +156,8 @@ class Simulator:
 
     def _visualize(self, hit_segments):
         pixels_per_meter = 5
-        canvas = Canvas(self.world_size, pixels_per_meter)
-        canvas.draw_segment_list(self._segments)
+        canvas = Canvas(self._world.get_world_size(), pixels_per_meter)
+        canvas.draw_segment_list(self._world.get_segments())
         canvas.draw_segment_list(hit_segments, color='g')
         canvas.draw_points(hit_segments[:, 1, :])
         canvas.show()
